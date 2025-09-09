@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myappac/loginview.dart';
 
 class Registerview extends StatefulWidget {
   const Registerview({super.key});
@@ -28,10 +29,8 @@ class _RegisterviewState extends State<Registerview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Register"),
-        backgroundColor: Colors.blue,
-      ),
+      appBar: AppBar(title: const Text('Login'), 
+                      backgroundColor: Colors.blueAccent),
       body: Column(
         children: [
           TextField(
@@ -66,12 +65,10 @@ class _RegisterviewState extends State<Registerview> {
             ),
             child: const Text("Register"),
           ),
-           TextButton(
+          TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                'login',
-                (keepPreviousActive) => false,
-              );
+              Navigator.of(context,).pushNamedAndRemoveUntil
+              ('login', (keepPreviousActive) => false);
             },
             child: const Text("Already Registered?Click Here"),
           ),

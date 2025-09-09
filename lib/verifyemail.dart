@@ -11,21 +11,25 @@ class VerifyEmail extends StatefulWidget {
 class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text("Please verify your email"),
-        TextButton(
-          onPressed: () async {
-            final user = FirebaseAuth.instance.currentUser;
-            await user?.sendEmailVerification();
-          },
-          style: TextButton.styleFrom(
-            foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-            backgroundColor: Colors.blueAccent,
+    return Scaffold(
+      appBar: AppBar( title: const Text('Verification'),
+                 backgroundColor: Colors.blueAccent),
+      body: Column(
+        children: [
+          const Text("Please verify your email"),
+          TextButton(
+            onPressed: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              await user?.sendEmailVerification();
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+              backgroundColor: Colors.blueAccent,
+            ),
+            child: const Text("Send Link"),
           ),
-          child: const Text("Send Link"),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
