@@ -7,8 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:myappac/loginview.dart';
-import 'package:myappac/main.dart';
 import 'package:myappac/registerview.dart';
 
 

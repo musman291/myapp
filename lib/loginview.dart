@@ -28,7 +28,8 @@ class _LoginviewState extends State<Loginview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Login"), backgroundColor: Colors.blue),
+      appBar: AppBar(title: const Text('Login'),
+                    backgroundColor: Colors.blue),
       body: Column(
         children: [
           TextField(
@@ -62,6 +63,15 @@ class _LoginviewState extends State<Loginview> {
               backgroundColor: const Color.fromARGB(255, 39, 232, 59),
             ),
             child: const Text("Login"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                'register',
+                (keepPreviousActive) => false,
+              );
+            },
+            child: const Text("Not Registered?Click Here"),
           ),
         ],
       ),
