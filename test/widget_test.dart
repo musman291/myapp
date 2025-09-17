@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:myappac/registerview.dart';
+import 'package:myappac/views/registerview.dart';
 
 
 void main() {
