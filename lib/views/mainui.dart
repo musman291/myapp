@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myappac/constants/constant.dart';
 
 
 enum Action { logout }
@@ -26,7 +27,7 @@ class _WelcomeState extends State<Welcome> {
                   final signout = await Logout(context);
                   if (signout) {
                     await FirebaseAuth.instance.signOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil('login', (_) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(login, (_) => false);
                   }
               }
             },

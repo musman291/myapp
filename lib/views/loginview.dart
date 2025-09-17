@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myappac/constants/constant.dart';
+import 'package:myappac/utilities/error_dialog.dart';
 
 class Loginview extends StatefulWidget {
   const Loginview({super.key});
@@ -58,8 +60,22 @@ class _LoginviewState extends State<Loginview> {
                   email: email,
                   password: passcode,
                 );
-                Navigator.of(context).pushNamedAndRemoveUntil('MainUI', (route) => false);
-              } on FirebaseAuthException {}
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil(welcome, (route) => false);
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'invalid-credential') {
+                  await showErrorDialog(context, 'Invalid Credential');
+                }
+                else {
+                  await showErrorDialog(context,
+                  'Error: ${e.code}');
+                }
+              } catch (e)
+              {
+                await showErrorDialog(context,
+                  e.toString(),);
+              }
             },
             style: TextButton.styleFrom(
               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -70,7 +86,7 @@ class _LoginviewState extends State<Loginview> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                'register',
+                register,
                 (keepPreviousActive) => false,
               );
             },

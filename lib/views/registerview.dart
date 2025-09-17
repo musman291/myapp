@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myappac/constants/constant.dart';
+import 'package:myappac/utilities/error_dialog.dart';
 
 class Registerview extends StatefulWidget {
   const Registerview({super.key});
@@ -58,7 +60,20 @@ class _RegisterviewState extends State<Registerview> {
                   email: email,
                   password: passcode,
                 );
-              } on FirebaseAuthException {}
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'channel-error') {
+                  await showErrorDialog(context, 'Invalid Format');
+                } else if (e.code == 'weak-password') {
+                  await showErrorDialog(context, 'Weak Password');
+                } else {
+                  await showErrorDialog(context,
+                  'Error: ${e.code}');
+                }
+              }
+              catch (e) {
+                await showErrorDialog(context,
+                  e.toString(),);
+              }
             },
             style: TextButton.styleFrom(
               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -70,7 +85,7 @@ class _RegisterviewState extends State<Registerview> {
             onPressed: () {
               Navigator.of(
                 context,
-              ).pushNamedAndRemoveUntil('login', (keepPreviousActive) => false);
+              ).pushNamedAndRemoveUntil(login, (keepPreviousActive) => false);
             },
             child: const Text("Already Registered?Click Here"),
           ),
