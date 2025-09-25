@@ -27,7 +27,7 @@ class _WelcomeState extends State<Welcome> {
                   final signout = await Logout(context);
                   if (signout) {
                     await FirebaseAuth.instance.signOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil(login, (_) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(loginroute, (_) => false);
                   }
               }
             },

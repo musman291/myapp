@@ -60,21 +60,25 @@ class _LoginviewState extends State<Loginview> {
                   email: email,
                   password: passcode,
                 );
-                Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil(welcome, (route) => false);
+                final user = FirebaseAuth.instance.currentUser;
+                if(user?.emailVerified ?? false )
+                {
+                  Navigator.of(context).pushNamedAndRemoveUntil(welcomeroute, (route) => false,);
+                }
+                else
+                {
+                  Navigator.of(
+                  context
+                ).pushNamedAndRemoveUntil(verifyemailroute, (route) => false,);
+                }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'invalid-credential') {
                   await showErrorDialog(context, 'Invalid Credential');
+                } else {
+                  await showErrorDialog(context, 'Error: ${e.code}');
                 }
-                else {
-                  await showErrorDialog(context,
-                  'Error: ${e.code}');
-                }
-              } catch (e)
-              {
-                await showErrorDialog(context,
-                  e.toString(),);
+              } catch (e) {
+                await showErrorDialog(context, e.toString());
               }
             },
             style: TextButton.styleFrom(
@@ -86,7 +90,7 @@ class _LoginviewState extends State<Loginview> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                register,
+                registerroute,
                 (keepPreviousActive) => false,
               );
             },

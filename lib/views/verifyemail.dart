@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myappac/constants/constant.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({super.key});
@@ -12,11 +13,14 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( title: const Text('Verification'),
-                 backgroundColor: Colors.blueAccent),
+      appBar: AppBar(
+        title: const Text('Verification'),
+        backgroundColor: Colors.blueAccent,
+      ),
       body: Column(
         children: [
-          const Text("Please verify your email"),
+          const Text("Email verification sent"),
+          const Text("If not received click below"),
           TextButton(
             onPressed: () async {
               final user = FirebaseAuth.instance.currentUser;
@@ -27,6 +31,16 @@ class _VerifyEmailState extends State<VerifyEmail> {
               backgroundColor: Colors.blueAccent,
             ),
             child: const Text("Send Link"),
+          ),
+          TextButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                registerroute,
+                (keepPreviousActive) => false,
+              );
+            },
+            child: const Text("Go Back"),
           ),
         ],
       ),

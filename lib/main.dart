@@ -8,6 +8,7 @@ import 'package:myappac/views/registerview.dart';
 import 'package:myappac/views/verifyemail.dart';
 import 'firebase_options.dart';
 
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
@@ -20,9 +21,10 @@ void main() {
       ),
       home: const Homepage(),
       routes: {
-        login: (context) => const Loginview(),
-        register: (context) => const Registerview(),
-        welcome: (context) => const Welcome(),
+        loginroute: (context) => const Loginview(),
+        registerroute: (context) => const Registerview(),
+        welcomeroute: (context) => const Welcome(),
+        verifyemailroute : (context) => const VerifyEmail(),
       },
     ),
   );
@@ -48,7 +50,7 @@ class Homepage extends StatelessWidget {
                 return const VerifyEmail();
               }
             } else {
-              return const Registerview();
+              return  Registerview();
             }
           default:
             return const CircularProgressIndicator();

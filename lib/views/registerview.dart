@@ -60,19 +60,21 @@ class _RegisterviewState extends State<Registerview> {
                   email: email,
                   password: passcode,
                 );
+                final user = FirebaseAuth.instance.currentUser;
+                await user?.sendEmailVerification();
+                Navigator.of(context).pushNamed(verifyemailroute);
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'channel-error') {
                   await showErrorDialog(context, 'Invalid Format');
                 } else if (e.code == 'weak-password') {
                   await showErrorDialog(context, 'Weak Password');
+                } else if (e.code == 'email-already-in-use') {
+                  await showErrorDialog(context, 'Email already in use');
                 } else {
-                  await showErrorDialog(context,
-                  'Error: ${e.code}');
+                  await showErrorDialog(context, 'Error: ${e.code}');
                 }
-              }
-              catch (e) {
-                await showErrorDialog(context,
-                  e.toString(),);
+              } catch (e) {
+                await showErrorDialog(context, e.toString());
               }
             },
             style: TextButton.styleFrom(
@@ -85,7 +87,7 @@ class _RegisterviewState extends State<Registerview> {
             onPressed: () {
               Navigator.of(
                 context,
-              ).pushNamedAndRemoveUntil(login, (keepPreviousActive) => false);
+              ).pushNamedAndRemoveUntil(loginroute, (keepPreviousActive) => false);
             },
             child: const Text("Already Registered?Click Here"),
           ),
