@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:myappac/constants/constant.dart';
+import 'package:myappac/services/auth/auth_exception.dart';
+import 'package:myappac/services/auth/auth_services.dart';
 import 'package:myappac/utilities/error_dialog.dart';
 
 class Loginview extends StatefulWidget {
@@ -56,12 +57,9 @@ class _LoginviewState extends State<Loginview> {
               final email = mail.text;
               final passcode = password.text;
               try {
-                await FirebaseAuth.instance.signInWithEmailAndPassword(
-                  email: email,
-                  password: passcode,
-                );
-                final user = FirebaseAuth.instance.currentUser;
-                if(user?.emailVerified ?? false )
+                await AuthServices.firebase().login(email: email, password: passcode,);
+                final user = AuthServices.firebase().currentuser;
+                if(user?.verified ?? false )
                 {
                   Navigator.of(context).pushNamedAndRemoveUntil(welcomeroute, (route) => false,);
                 }
@@ -71,14 +69,11 @@ class _LoginviewState extends State<Loginview> {
                   context
                 ).pushNamedAndRemoveUntil(verifyemailroute, (route) => false,);
                 }
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'invalid-credential') {
-                  await showErrorDialog(context, 'Invalid Credential');
-                } else {
-                  await showErrorDialog(context, 'Error: ${e.code}');
-                }
-              } catch (e) {
-                await showErrorDialog(context, e.toString());
+              } on InvalidcredentialException {
+                 await showErrorDialog(context, 'Invalid Credential');
+              } 
+              on GenericException {
+                  await showErrorDialog(context, 'Authentication Error');
               }
             },
             style: TextButton.styleFrom(

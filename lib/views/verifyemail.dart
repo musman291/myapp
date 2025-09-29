@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myappac/constants/constant.dart';
+import 'package:myappac/services/auth/auth_services.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({super.key});
@@ -23,8 +23,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           const Text("If not received click below"),
           TextButton(
             onPressed: () async {
-              final user = FirebaseAuth.instance.currentUser;
-              await user?.sendEmailVerification();
+              AuthServices.firebase().sendverificationemail();
             },
             style: TextButton.styleFrom(
               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -34,7 +33,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           ),
           TextButton(
             onPressed: () async {
-              await FirebaseAuth.instance.signOut();
+              await AuthServices.firebase().logout();
               Navigator.of(context).pushNamedAndRemoveUntil(
                 registerroute,
                 (keepPreviousActive) => false,

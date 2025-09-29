@@ -1,13 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:myappac/constants/constant.dart';
+import 'package:myappac/services/auth/auth_services.dart';
 import 'package:myappac/views/loginview.dart';
 import 'package:myappac/views/mainui.dart';
 import 'package:myappac/views/registerview.dart';
 import 'package:myappac/views/verifyemail.dart';
-import 'firebase_options.dart';
-
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,15 +33,13 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      ),
+      future: AuthServices.firebase().initialize(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-            final user = FirebaseAuth.instance.currentUser;
+            final user = AuthServices.firebase().currentuser;
             if (user != null) {
-              if (user.emailVerified) {
+              if (user.verified) {
                 return Welcome();
               } else {
                 return const VerifyEmail();

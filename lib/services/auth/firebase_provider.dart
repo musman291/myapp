@@ -1,10 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:myappac/firebase_options.dart';
 import 'package:myappac/services/auth/auth_exception.dart';
 import 'package:myappac/services/auth/auth_provider.dart';
 import 'package:myappac/services/auth/auth_user.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
 
-class Firebase_Provider implements AuthProvider {
+class FirebaseAuthProvider implements AuthProvider {
   @override
   AuthUser? get currentuser {
     final user = FirebaseAuth.instance.currentUser;
@@ -85,5 +87,10 @@ class Firebase_Provider implements AuthProvider {
     } else {
       throw GenericException();
     }
+  }
+
+  @override
+  Future<void> initialize() async {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   }
 }

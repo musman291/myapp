@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myappac/constants/constant.dart';
-
-
-enum Action { logout }
+import 'package:myappac/enum/enum.dart';
+import 'package:myappac/services/auth/auth_services.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
@@ -20,21 +18,23 @@ class _WelcomeState extends State<Welcome> {
         title: const Text('Welcome'),
         backgroundColor: Colors.blueAccent,
         actions: [
-          PopupMenuButton<Action>(
+          PopupMenuButton<MenuAction>(
             onSelected: (value) async {
               switch (value) {
-                case Action.logout:
+                case MenuAction.logout:
                   final signout = await Logout(context);
                   if (signout) {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil(loginroute, (_) => false);
+                    await AuthServices.firebase().logout();
+                    Navigator.of(
+                      context,
+                    ).pushNamedAndRemoveUntil(loginroute, (_) => false);
                   }
               }
             },
             itemBuilder: (context) {
               return const [
-                PopupMenuItem<Action>(
-                  value: Action.logout,
+                PopupMenuItem<MenuAction>(
+                  value: MenuAction.logout,
                   child: Text('LogOut'),
                 ),
               ];

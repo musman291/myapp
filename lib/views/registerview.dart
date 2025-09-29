@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myappac/constants/constant.dart';
+import 'package:myappac/services/auth/auth_exception.dart';
+import 'package:myappac/services/auth/auth_services.dart';
 import 'package:myappac/utilities/error_dialog.dart';
 
 class Registerview extends StatefulWidget {
@@ -56,25 +57,23 @@ class _RegisterviewState extends State<Registerview> {
               final email = mail.text;
               final passcode = password.text;
               try {
-                await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                await AuthServices.firebase().register(
                   email: email,
                   password: passcode,
                 );
-                final user = FirebaseAuth.instance.currentUser;
-                await user?.sendEmailVerification();
+                AuthServices.firebase().sendverificationemail();
                 Navigator.of(context).pushNamed(verifyemailroute);
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'channel-error') {
-                  await showErrorDialog(context, 'Invalid Format');
-                } else if (e.code == 'weak-password') {
-                  await showErrorDialog(context, 'Weak Password');
-                } else if (e.code == 'email-already-in-use') {
-                  await showErrorDialog(context, 'Email already in use');
-                } else {
-                  await showErrorDialog(context, 'Error: ${e.code}');
-                }
-              } catch (e) {
-                await showErrorDialog(context, e.toString());
+              } on InvalidFormatException {
+                await showErrorDialog(context, 'Invalid Format');
+              } 
+              on WeakpasswordException {
+                await showErrorDialog(context, 'Weak Password');
+              }
+              on EmailinUseException {
+                await showErrorDialog(context, 'Email already in use');
+              }
+              on GenericException {
+                await showErrorDialog(context, 'Authentication Error');
               }
             },
             style: TextButton.styleFrom(
@@ -85,9 +84,10 @@ class _RegisterviewState extends State<Registerview> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(
-                context,
-              ).pushNamedAndRemoveUntil(loginroute, (keepPreviousActive) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                loginroute,
+                (keepPreviousActive) => false,
+              );
             },
             child: const Text("Already Registered?Click Here"),
           ),
